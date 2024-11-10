@@ -28,11 +28,6 @@ body {
   position: relative;
 }
 
-#chat-input:focus + #suggestion {
-  right: calc(100% - var(--input-width));
-}
-
-
 #send-btn {
   display: block;
   margin-right: 20px;
@@ -42,7 +37,8 @@ body {
 
 
 #delete-btn {
-  width: 45px; 
+  width: 50px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,7 +50,7 @@ body {
 
 
 .chat-container {
-  margin-top:50px;
+  margin-top: 50px;
   overflow-y: auto;
   max-height: 100vh;
   padding-bottom: 150px;
@@ -175,9 +171,8 @@ span.material-symbols-rounded {
 
 .chat-details {
     display: flex;
-    gap: 25px; 
-    width: 100%;
-    font-size: auto;
+    gap: 15px;
+    align-items: flex-start;
 }
 
 .chat-details img {
@@ -195,11 +190,13 @@ span.material-symbols-rounded {
 
 .chat-details p {
     white-space: pre-wrap;
-    font-size: 12px;
-    padding: 0 25px 0 25px;
+    font-size: 14px;
+    padding: 0 25px;
     color: var(--text-color);
     word-break: break-word;
-    text-align: justify;
+    text-align: left;
+    line-height: 1.6;
+    margin: 8px 0;
 }
 .chat-details iframe {
   width: 100% !important; 
@@ -370,6 +367,9 @@ span.material-symbols-rounded {
   width: 100%;
   height: auto;
 }
+  #smart {
+    font-size: 90px !important;
+  }
 }
 
 /* For screens with a width between 600px and 1200px (medium screens) */
@@ -385,7 +385,7 @@ span.material-symbols-rounded {
     font-size: 14px;
   }
   #smart{
-   font-size: 4rem;
+   font-size: 100px !important;
   }
   .default-text p{
     font-size: 1.2rem;
@@ -432,14 +432,8 @@ span.material-symbols-rounded {
    position: fixed;
    bottom: 22%;
 }
-  #img1 {
-    height: 70%;
-}
-  #theme-btn{
-    margin-right: 30px;
-  }
   #smart{
-   font-size: 80px;
+   font-size: 150px;
   }
   .default-text h1 {
     font-size: 3.3rem;
@@ -638,7 +632,7 @@ span.material-symbols-rounded {
 
 .chat-details code {
     font-family: 'Fira Code', monospace;
-    font-size: 0.9em;
+    font-size: 14px;
     color: #d4d4d4;
     line-height: 1.6;
     display: block;
@@ -663,29 +657,6 @@ span.material-symbols-rounded {
     position: relative;
 }
 
-.chat-details pre:hover .copy-code {
-    opacity: 1;
-}
-
-.copy-code {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 4px 8px;
-    background: #333;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-}
-
-.copy-code:hover {
-    background: #444;
-}
-
 /* Code block styling with Prism */
 .chat-details pre[class*="language-"] {
     background: #1e1e1e;
@@ -696,7 +667,7 @@ span.material-symbols-rounded {
 
 .chat-details code[class*="language-"] {
     font-family: 'Fira Code', monospace;
-    font-size: 0.9em;
+    font-size: 14px;
     text-shadow: none;
 }
 
@@ -798,5 +769,301 @@ span.material-symbols-rounded {
 
 .copy-button:hover {
   background: #555;
+}
+
+/* Base styles for mobile first approach */
+.default-text {
+  padding: 0 20px;
+  height: auto;
+  min-height: 60vh;
+}
+
+.default-text h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.chat-details {
+  gap: 15px;
+}
+
+.chat-details p {
+  font-size: 14px;
+  padding: 0 15px;
+}
+
+/* Small screens (phones) */
+@media screen and (max-width: 600px) {
+  .typing-container {
+    padding: 10px;
+    margin-bottom: 25px;
+  }
+
+  .typing-textarea textarea {
+    padding: 10px 35px 10px 10px;
+    font-size: 14px;
+  }
+
+  .chat-container {
+    margin-top: 30px;
+    padding-bottom: 120px;
+  }
+
+  #smart {
+    font-size: 40px !important;
+  }
+
+  .default-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .chat-details img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Medium screens (tablets) */
+@media screen and (min-width: 601px) and (max-width: 1200px) {
+  .typing-container {
+    padding: 15px 20px;
+    margin-bottom: 27px;
+  }
+
+  .default-text {
+    padding: 0 30px;
+  }
+
+  #smart {
+    font-size: 60px !important;
+  }
+
+  .chat-details {
+    gap: 20px;
+  }
+
+  .chat-details p {
+    padding: 0 20px;
+  }
+
+  .chat-container {
+    margin-top: 40px;
+    padding-bottom: 130px;
+  }
+}
+
+/* Large screens (desktops) */
+@media screen and (min-width: 1201px) {
+  .typing-container {
+    padding: 20px 40px;
+  }
+
+  .default-text {
+    padding: 0 50px;
+  }
+
+  .chat-details {
+    gap: 25px;
+  }
+
+  .chat-details p {
+    padding: 0 25px;
+  }
+
+  #smart {
+    font-size: 80px;
+  }
+
+  .chat-container {
+    margin-top: 50px;
+    padding-bottom: 150px;
+  }
+}
+
+/* Improved image responsiveness */
+.chat-details .image-container {
+  max-width: 100%;
+  margin: 10px 0;
+}
+
+.chat-details .image-container img {
+  max-width: 100%;
+  height: auto;
+  padding: 0 25px;
+}
+
+/* Better code block responsiveness */
+.chat-details pre[class*="language-"] {
+  margin: 10px 15px;
+  max-width: calc(100% - 30px);
+}
+
+/* Improved typing container positioning */
+.typing-container {
+  position: fixed;
+  bottom: 0;
+  background: rgba(34, 35, 39, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* Better scrolling experience */
+.chat-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Improved button responsiveness */
+.typing-controls span {
+  padding: 8px;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Update code block styling */
+.chat-details pre[class*="language-"] {
+    margin: 10px 25px;
+    border-radius: 8px;
+    background: #1e1e1e !important;
+    max-height: 400px;
+    font-size: 14px !important;
+}
+
+.chat-details code[class*="language-"] {
+    font-family: 'Fira Code', monospace !important;
+    font-size: 14px !important;
+    text-shadow: none !important;
+    line-height: 1.6 !important;
+}
+
+/* Add responsive font sizes for different screen sizes */
+@media screen and (max-width: 600px) {
+    .chat-details pre[class*="language-"],
+    .chat-details code[class*="language-"] {
+        font-size: 14px !important;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1200px) {
+    .chat-details pre[class*="language-"],
+    .chat-details code[class*="language-"] {
+        font-size: 14px !important;
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .chat-details pre[class*="language-"],
+    .chat-details code[class*="language-"] {
+        font-size: 14px !important;
+    }
+}
+
+/* Remove duplicate token color definitions and keep only these */
+.token.comment { color: #6A9955 !important; }
+.token.string { color: #CE9178 !important; }
+.token.number { color: #B5CEA8 !important; }
+.token.keyword { color: #569CD6 !important; }
+.token.function { color: #DCDCAA !important; }
+.token.class-name { color: #4EC9B0 !important; }
+.token.operator { color: #D4D4D4 !important; }
+
+/* Remove or comment out all previous code block styling and replace with these consolidated styles */
+
+/* Base code block styling */
+.chat-details pre[class*="language-"] {
+    margin: 10px 25px;
+    border-radius: 8px;
+    background: #1e1e1e !important;
+    max-height: 400px;
+    padding: 2.5em 1em 1em;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-size: 12px !important; /* Base font size */
+}
+
+.chat-details code[class*="language-"] {
+    font-family: 'Fira Code', monospace !important;
+    font-size: inherit !important; /* Inherit from parent pre */
+    text-shadow: none !important;
+    line-height: 1.6 !important;
+    background: none !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Language label */
+.chat-details pre[class*="language-"]::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #2d2d2d;
+    color: #75a99c;
+    font-size: 0.8em;
+    padding: 0.5em 1em;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 1px solid #444;
+}
+
+/* Responsive font sizes */
+@media screen and (max-width: 600px) {
+    .chat-details pre[class*="language-"] {
+        font-size: 11px !important;
+        margin: 10px 15px;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1200px) {
+    .chat-details pre[class*="language-"] {
+        font-size: 12px !important;
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .chat-details pre[class*="language-"] {
+        font-size: 13px !important;
+    }
+}
+
+/* Token colors */
+.token.comment { color: #6A9955 !important; }
+.token.string { color: #CE9178 !important; }
+.token.number { color: #B5CEA8 !important; }
+.token.keyword { color: #569CD6 !important; }
+.token.function { color: #DCDCAA !important; }
+.token.class-name { color: #4EC9B0 !important; }
+.token.operator { color: #D4D4D4 !important; }
+
+/* Add styles for markdown elements */
+.chat-details strong {
+    font-weight: 600;
+    color: #75a99c;
+}
+
+.chat-details br {
+    display: block;
+    content: "";
+    margin: 8px 0;
+}
+
+/* Update typing text container */
+.typing-text {
+    flex: 1;
+    padding: 0 25px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .chat-details p,
+    .typing-text {
+        font-size: 13px;
+        padding: 0 15px;
+    }
 }
 

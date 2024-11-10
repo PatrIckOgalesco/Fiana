@@ -188,52 +188,61 @@ generateResponse().then(() => {
 const typeText = async (element, text, speed = 15) => {
     let index = 0;
     element.innerHTML = '';
-    
-    const processMarkdown = async () => {
-        while (index < text.length) {
-            // Handle code blocks
-            if (text.substring(index).startsWith('```')) {
-                const endIndex = text.indexOf('```', index + 3);
-                if (endIndex !== -1) {
-                    const codeBlock = text.substring(index + 3, endIndex);
-                    const language = codeBlock.split('\n')[0].trim();
-                    const code = codeBlock.split('\n').slice(1).join('\n');
-                    
-                    const pre = document.createElement('pre');
-                    pre.setAttribute('data-language', language);
-                    pre.className = `language-${language}`;
-                    
-                    const codeElement = document.createElement('code');
-                    codeElement.className = `language-${language}`;
-                    codeElement.textContent = code;
-                    
-                    const copyButton = document.createElement('button');
-                    copyButton.className = 'copy-button';
-                    copyButton.textContent = 'Copy';
-                    copyButton.onclick = () => {
-                        navigator.clipboard.writeText(code);
-                        copyButton.textContent = 'Copied!';
-                        setTimeout(() => copyButton.textContent = 'Copy', 2000);
-                    };
-                    
-                    pre.appendChild(copyButton);
-                    pre.appendChild(codeElement);
-                    element.appendChild(pre);
-                    
-                    Prism.highlightElement(codeElement);
-                    index = endIndex + 3;
-                    await new Promise(resolve => setTimeout(resolve, speed * 10));
-                }
-            } else {
-                element.innerHTML += text.charAt(index);
-                index++;
-                await new Promise(resolve => setTimeout(resolve, speed));
-            }
-        }
-    };
 
-    await processMarkdown();
-    return Promise.resolve();
+    while (index < text.length) {
+        if (text.substring(index).startsWith('```')) {
+            const endIndex = text.indexOf('```', index + 3);
+            if (endIndex !== -1) {
+                // Extract language and code
+                const codeBlock = text.substring(index + 3, endIndex);
+                const firstLineEnd = codeBlock.indexOf('\n');
+                const language = codeBlock.substring(0, firstLineEnd).trim();
+                const code = codeBlock.substring(firstLineEnd + 1).trim();
+
+                // Create code elements
+                const pre = document.createElement('pre');
+                const codeEl = document.createElement('code');
+                
+                // Set classes for Prism
+                pre.className = `language-${language}`;
+                codeEl.className = `language-${language}`;
+                
+                // Set the code content
+                codeEl.textContent = code;
+                
+                // Add language label
+                pre.setAttribute('data-language', language);
+                
+                // Add copy button
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.textContent = 'Copy';
+                copyButton.onclick = () => {
+                    navigator.clipboard.writeText(code);
+                    copyButton.textContent = 'Copied!';
+                    setTimeout(() => copyButton.textContent = 'Copy', 2000);
+                };
+
+                // Assemble elements
+                pre.appendChild(copyButton);
+                pre.appendChild(codeEl);
+                element.appendChild(pre);
+
+                // Highlight the code
+                Prism.highlightElement(codeEl);
+
+                index = endIndex + 3;
+                await new Promise(resolve => setTimeout(resolve, 50));
+            } else {
+                index += 3;
+            }
+        } else {
+            element.innerHTML += text.charAt(index);
+            index++;
+            await new Promise(resolve => setTimeout(resolve, speed));
+        }
+        chatContainer.scrollTo(0, chatContainer.scrollHeight);
+    }
 };
 
 // Add this at the end of your script
@@ -261,12 +270,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const handleOutgoingChat = async () => {
+const handleOutgoingChat = async (retryCount = 0) => {
     try {
+        // Add loading state
         const loadingDiv = createLoadingElement();
         chatContainer.appendChild(loadingDiv);
         
-        const response = await generateResponse();
+        // Add timeout for API calls
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timeout')), 30000));
+            
+        const response = await Promise.race([
+            generateResponse(),
+            timeoutPromise
+        ]);
+        
         loadingDiv.remove();
         
         const chatDiv = createChatElement(response, 'incoming');
@@ -275,8 +293,9 @@ const handleOutgoingChat = async () => {
         await typeText(chatDiv.querySelector('.typing-text'), response.text);
         
     } catch (error) {
-        console.error('Chat error:', error);
-        showErrorMessage('Failed to generate response. Please try again.');
+        console.error('Error type:', error.name, 'Message:', error.message);
+        const errorMessage = getErrorMessage(error); // Create custom error messages
+        showErrorMessage(errorMessage);
     }
 };
 
