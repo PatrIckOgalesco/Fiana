@@ -1,0 +1,299 @@
+/* Root Variables */
+:root {
+  --body-color: #18191a;
+  --sidebar-color: #242526;
+  --primary-color: #222327;
+  --text-color: #FFFFFF;
+  --grey: #F5F5F5;
+}
+
+/* Top Navigation Styles */
+.top-nav {
+  background: var(--primary-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  z-index: 100;
+  opacity: 95%;
+}
+
+.top-nav .nav-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-label {
+  font-size: 14px;
+  color: #FFFFFF;
+  margin-left: 10px; 
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.version {
+  margin-left: 9px;
+  color: #75a99c;
+}
+
+/* Navigation Buttons */
+#nav-btn {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.9s ease;
+}
+
+/* Sidebar Menu Links */
+.menu-links {
+  list-style: none;
+  padding: 10px;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+}
+
+.menu-links li {
+  margin-top: 20px;
+}
+
+.menu-links .nav-link a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.menu-links #home-button i,
+.menu-links #about-button i,
+.menu-links #aboutUs-button i,
+.menu-links #contact-button i {
+    margin-right: 25px !important;
+    color: #FFFFFF;
+}
+
+.menu-links #admin-button i {
+    color: #75a99c;
+}
+
+.menu-links .nav-link a:hover i,
+.menu-links .nav-link a:active i {
+    color: #75a99c;
+}
+
+#icon {
+  font-size: 11px;
+  color: #FFFFFF;
+}
+
+/* Layout Container Styles */
+.wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  padding-top: 48px;
+}
+
+.container {
+  flex: 1;
+  min-width: 0;
+  transition: margin-left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 44px;
+  left: -230px;
+  width: 230px;
+  height: calc(100% - 44px);
+  padding: 30px 14px;
+  background: var(--sidebar-color);
+  z-index: 99;
+  transition: left 0.3s ease;
+  border-right: 1px solid #0F1923;
+  flex-shrink: 0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Chat Container Styles */
+.chat-container {
+  flex: 1;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  width: 100%;
+}
+
+/* Responsive Layout Styles */
+@media screen and (min-width: 800px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+  }
+
+  .container {
+    margin-left: 230px;
+  }
+
+  .typing-container {
+    width: calc(100% - 230px);
+    margin-left: 230px;
+  }
+
+  .container.container-pushed .disclaimer {
+    margin-left: 230px;
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .sidebar {
+    left: -230px;
+    z-index: 1000;
+  }
+
+  .container {
+    margin-left: 0 !important;
+    width: 100% !important;
+    transition: none;
+  }
+
+  .typing-container {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sidebar.open {
+    left: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar.open + .container,
+  .sidebar.open ~ .container,
+  .container.container-pushed,
+  .typing-container.typing-container-pushed,
+  .about-container,
+  .aboutus-container,
+  .contact-container {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .sidebar.open::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+}
+
+/* Add or update these styles */
+@media screen and (max-width: 800px) {
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        background: var(--outgoing-chat-bg);
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.open {
+        left: 0;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Remove or comment out the container push for small screens */
+    .container-pushed {
+        margin-left: 0 !important;
+    }
+}
+
+/* Add these styles for the loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--body-color);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid transparent;
+    border-top-color: #75a99c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Add these styles for nav-link hover effects */
+.nav-link a {
+    display: flex;
+    align-items: center;
+    padding: 5px 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.nav-link a:hover {
+    background: rgba(117, 169, 156, 0.1);
+    color: #75a99c;
+}
+
+.nav-link a:hover #icon {
+    color: #75a99c;
+}
+
+#icon {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+/* Active link styling */
+.nav-link a.active {
+    background: rgba(117, 169, 156, 0.1);
+    color: #75a99c;
+}
+
+.nav-link a.active #icon {
+    color: #75a99c;
+}

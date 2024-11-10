@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Fiana</title>
+      <link rel="stylesheet" href="src/style.css">
+      <link rel="stylesheet" href="src/nav.css">
+      <link rel="stylesheet" href="src/about.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+      <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+      <link href="https://fonts.cdnfonts.com/css/valorant" rel="stylesheet"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+
+   </head>
+   <body>
+      <nav class="top-nav">
+         <div class="nav-container">
+            <i id="nav-btn" class='bx bx-menu'></i>
+            <span class="nav-label"> Fiana<span class="version"> version 1.0.0.0</span></span>
+         </div>
+      </nav>
+      <div class="wrapper">
+         <section class="sidebar close">
+            <div class="menu-bar">
+               <div class="menu">
+                  <ul class="menu-links">
+                     <li class="nav-link">
+                        <a href="index.html" id="home-button">
+                        <i class="bx bxs-home" id="icon"></i> Home
+                        </a>
+                     </li>
+                     <li class="nav-link">
+                        <a href="about.html" id="aboutUs-button">
+                        <i class="bx bx-info-circle" id="icon"></i> About
+                        </a>
+                     </li>
+                     <li class="nav-link">
+                        <a href="aboutus.html" id="aboutUs-button">
+                        <i class="bx bx-code-alt" id="icon"></i> About Us
+                        </a>
+                     </li>
+                     <li class="nav-link">
+                        <a href="contact.html" id="contact-button">
+                        <i class="bx bx-envelope" id="icon"></i> Contact
+                        </a>
+                     </li>
+                     <br><br>
+                     <p style="color: #75a99c; font-size: 9px;">Note: This system is made for group project only!!</p>
+                  </ul>
+               </div>
+            </div>
+         </section>
+         <div class="container">
+            <div class="chat-container"></div>
+            <div class="typing-container">
+               <div class="typing-textarea">
+                  <textarea id="chat-input" spellcheck="false" placeholder="Enter a prompt here" required></textarea>
+                  <span id="send-btn" class='bx bx-send'></span>
+               </div>
+               <div class="typing-controls">
+                  <span id="delete-btn" class='bx bx-trash'></span>
+               </div>
+            </div>
+            <div class="disclaimer" style="color: #FFFFFF;">
+               <span> Free Research Preview</span> Limit by Gemini API.
+            </div>
+         </div>
+      </div>
+      <!-- Add this right after your existing script tags in the head section -->
+      <script type="importmap">
+         {
+            "imports": {
+               "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+         }
+      </script>
+
+      <!-- Replace your existing script section with this -->
+      <script type="module">
+         import { GoogleGenerativeAI } from "@google/generative-ai";
+
+         const chatInput = document.querySelector("#chat-input");
+         const sendButton = document.querySelector("#send-btn");
+         const chatContainer = document.querySelector(".chat-container");
+         const deleteButton = document.querySelector("#delete-btn");
+
+         let userText = '';
+
+         // Initialize Google AI
+         const genAI = new GoogleGenerativeAI("AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc");
+         const model = genAI.getGenerativeModel({
+            model: "gemini-pro"
+         });
+
+         // Add these functions right after your existing imports
+         const typeText = (element, text, speed = 15) => {
+            let index = 0;
+            element.innerHTML = '';
+            
+            return new Promise((resolve) => {
+                function type() {
+                    if (index < text.length) {
+                        // Handle markdown formatting
+                        if (text.substring(index).startsWith('**')) {
+                            // Bold text
+                            const endIndex = text.indexOf('**', index + 2);
+                            if (endIndex !== -1) {
+                                element.innerHTML += `<strong>${text.substring(index + 2, endIndex)}</strong>`;
+                                index = endIndex + 2;
+                            }
+                        } else if (text.substring(index).startsWith('```')) {
+                            // Code block - add with syntax highlighting
+                            const endIndex = text.indexOf('```', index + 3);
+                            if (endIndex !== -1) {
+                                const codeBlock = text.substring(index, endIndex + 3);
+                                element.innerHTML += `<pre><code>${codeBlock}</code></pre>`;
+                                index = endIndex + 3;
+                            }
+                        } else if (text.substring(index).startsWith('*')) {
+                            // Italic text
+                            const endIndex = text.indexOf('*', index + 1);
+                            if (endIndex !== -1) {
+                                element.innerHTML += `<em>${text.substring(index + 1, endIndex)}</em>`;
+                                index = endIndex + 1;
+                            }
+                        } else {
+                            element.innerHTML += text.charAt(index);
+                            index++;
+                        }
+                        
+                        chatContainer.scrollTo(0, chatContainer.scrollHeight);
+                        setTimeout(type, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                type();
+            });
+        };
+
+         // Update the handleOutgoingChat function to include typing animation
+         const handleOutgoingChat = async (retryCount = 0) => {
+            userText = chatInput.value.trim();
+            if (!userText) return;
+
+            chatInput.value = "";
+
+            // Display user's message
+            const userChatHtml = `<div class="chat-content">
+                <div class="chat-details">
+                    <img src="src/images/user1.jpg" alt="user-img">
+                    ${userText}
+                </div>
+            </div>`;
+
+            const outgoingChatDiv = createChatElement(userChatHtml, "outgoing");
+            chatContainer.querySelector(".default-text")?.remove();
+            chatContainer.appendChild(outgoingChatDiv);
+            chatContainer.scrollTo(0, chatContainer.scrollHeight);
+
+            try {
+                // Create and append the bot's chat div with loading indicator
+                const loadingChatHtml = `<div class="chat-content">
+                    <div class="chat-details">
+                        <img src="src/images/chatlogo.jpg" alt="chatbot-img">
+                        <div class="typing-dots">
+                            <span>.</span><span>.</span><span>.</span>
+                        </div>
+                    </div>
+                </div>`;
+                const loadingDiv = createChatElement(loadingChatHtml, "incoming");
+                chatContainer.appendChild(loadingDiv);
+
+                // Get response from Gemini
+                const result = await model.generateContent(userText);
+                const response = await result.response;
+                const modelResponse = response.text();
+
+                // Remove loading indicator
+                loadingDiv.remove();
+
+                // Create the final response div
+                const modelChatHtml = `<div class="chat-content">
+                    <div class="chat-details">
+                        <img src="src/images/chatlogo.jpg" alt="chatbot-img">
+                        <div class="typing-text"></div>
+                    </div>
+                </div>`;
+
+                const incomingChatDiv = createChatElement(modelChatHtml, "incoming");
+                chatContainer.appendChild(incomingChatDiv);
+
+                // Get the typing-text div and animate the response
+                const typingTextDiv = incomingChatDiv.querySelector('.typing-text');
+                await typeText(typingTextDiv, modelResponse);
+
+                // Save to localStorage after animation is complete
+                localStorage.setItem("all-chats", chatContainer.innerHTML);
+            } catch (error) {
+                console.error('Error:', error);
+                if (retryCount < 3) {
+                    // Retry with exponential backoff
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
+                    return handleOutgoingChat(retryCount + 1);
+                }
+                // Show error message after all retries fail
+                const errorChatHtml = `<div class="chat-content">
+                    <div class="chat-details">
+                        <img src="src/images/chatlogo.jpg" alt="chatbot-img">
+                        <div class="error-message">
+                            Sorry, I encountered an error. Please try again later.
+                            <button onclick="handleRetry(this)" class="retry-btn">Retry</button>
+                        </div>
+                    </div>
+                </div>`;
+                const errorChatDiv = createChatElement(errorChatHtml, "incoming");
+                chatContainer.appendChild(errorChatDiv);
+            }
+         };
+
+         // Keep your existing helper functions
+         const createChatElement = (content, className) => {
+            const chatDiv = document.createElement("div");
+            chatDiv.classList.add("chat", className);
+            chatDiv.innerHTML = content;
+            return chatDiv;
+         };
+
+         const deleteChats = () => {
+            if (confirm("Are you sure you want to delete all the chats?")) {
+               localStorage.removeItem("all-chats");
+               loadDataFromLocalstorage();
+            }
+         };
+
+         // Load initial default text in chat
+         const loadDataFromLocalstorage = () => {
+            const defaultText = `<div class="default-text"><br><br>
+               <h1>Hello there, welcome!</h1><br>
+               <p style="font-weight: bold;" id="intro">Your Personal Asssistance</p>
+               <span id="typewriter"></span>
+               <span id="cursor">|</span><br>
+              
+               <div class="default-intro2" id="default-intro2">
+                     <h2 id="smart"> Fiana AI</h2>
+                     <div class="default-sub" id="default-sub">
+                        <p id="sub" style="font-size: 12px;">"Powered by Gemini API, this chatbot redefines user engagement with responsive, adaptive interactions and insightful support."</p>
+                     </div>
+               </div>
+            </div>`;
+
+            // Check if there's a persistChat parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldPersist = urlParams.get('persistChat') === 'true';
+
+            if (!shouldPersist) {
+                // Clear localStorage if we're not explicitly persisting
+                localStorage.removeItem("all-chats");
+                chatContainer.innerHTML = defaultText;
+            } else {
+                // Load from localStorage only if we're persisting
+                chatContainer.innerHTML = localStorage.getItem("all-chats") || defaultText;
+            }
+            
+            chatContainer.scrollTo(0, chatContainer.scrollHeight);
+         };
+
+         // Add this function to handle page unload
+         window.addEventListener('beforeunload', () => {
+            // Clear localStorage when leaving the page
+            localStorage.removeItem("all-chats");
+         });
+
+         // Event listeners
+         const initialInputHeight = chatInput.scrollHeight;
+
+         chatInput.addEventListener("input", () => {
+            chatInput.style.height = `${initialInputHeight}px`;
+            chatInput.style.height = `${chatInput.scrollHeight}px`;
+         });
+
+         chatInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey && window.innerWidth > 800) {
+               e.preventDefault();
+               handleOutgoingChat();
+            }
+         });
+
+         loadDataFromLocalstorage();
+         sendButton.addEventListener("click", handleOutgoingChat);
+         deleteButton.addEventListener("click", deleteChats);
+      </script>
+      <script src="src/script.js"></script>
+   </body>
+</html>
