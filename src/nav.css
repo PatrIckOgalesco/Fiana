@@ -36,9 +36,13 @@
 }
 
 .logo-img {
-  margin-left: 10px;
-  margin-right: 10px;
+  width: 20px;
+  height: auto;
+  margin-left: 8px;
+  vertical-align: middle; 
+  border-radius: 50%;
 }
+
 
 .version {
   margin-left: 9px;

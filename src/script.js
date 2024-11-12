@@ -45,31 +45,61 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isMainPage && window.innerWidth < 800) {
             container.classList.toggle("container-pushed");
         }
+        // Toggle the menu icon
+        navBtn.classList.toggle('bx-menu');
+        navBtn.classList.toggle('bx-menu-alt-left');
+    }
+
+    // Function to close sidebar
+    function closeSidebar() {
+        if (sidebar.classList.contains("open")) {
+            sidebar.classList.remove("open");
+            if (isMainPage && window.innerWidth < 800) {
+                container.classList.remove("container-pushed");
+            }
+            navBtn.classList.remove('bx-menu-alt-left');
+            navBtn.classList.add('bx-menu');
+        }
     }
 
     // Event listener for the navigation button
     if (navBtn) {
-        navBtn.addEventListener("click", function () {
+        navBtn.addEventListener("click", function (e) {
+            e.stopPropagation(); // Prevent click from bubbling to document
             toggleSidebar();
-            // Toggle the menu icon
-            if (navBtn.classList.contains('bx-menu')) {
-                navBtn.classList.remove('bx-menu');
-                navBtn.classList.add('bx-menu-alt-left');
-            } else {
-                navBtn.classList.remove('bx-menu-alt-left');
-                navBtn.classList.add('bx-menu');
-            }
         });
     }
+
+    // Close sidebar when clicking anywhere on the document
+    document.addEventListener("click", function (e) {
+        // Check if click is outside sidebar and nav button
+        if (!sidebar.contains(e.target) && e.target !== navBtn) {
+            closeSidebar();
+        }
+    });
+
+    // Close sidebar when touching anywhere on mobile
+    document.addEventListener("touchstart", function (e) {
+        // Check if touch is outside sidebar and nav button
+        if (!sidebar.contains(e.target) && e.target !== navBtn) {
+            closeSidebar();
+        }
+    });
+
+    // Prevent clicks inside sidebar from closing it
+    sidebar.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
 
     // Function to handle window resize
     function handleWindowResize() {
         if (window.innerWidth >= 800) {
             sidebar.classList.add("open");
-            container.classList.add("container-pushed");
+            if (isMainPage) {
+                container.classList.add("container-pushed");
+            }
         } else {
-            sidebar.classList.remove("open");
-            container.classList.remove("container-pushed");
+            closeSidebar(); // Close sidebar on mobile when resizing
         }
     }
 
