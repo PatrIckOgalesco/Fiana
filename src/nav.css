@@ -33,6 +33,7 @@
   margin-left: 10px; 
   display: flex;
   align-items: center;
+  font-family: "Kode Mono", monospace;;
 }
 
 .logo-img {
@@ -47,6 +48,7 @@
 .version {
   margin-left: 9px;
   color: #75a99c;
+  font-family: "Kode Mono", monospace;
 }
 
 /* Navigation Buttons */
@@ -78,6 +80,7 @@
     text-decoration: none;
     color: var(--text-color);
     margin-bottom: 10px;
+    font-family: "Kode Mono", monospace;
 }
 
 .menu-links #home-button i,
@@ -88,9 +91,6 @@
     color: #FFFFFF;
 }
 
-.menu-links #admin-button i {
-    color: #75a99c;
-}
 
 .menu-links .nav-link a:hover i,
 .menu-links .nav-link a:active i {

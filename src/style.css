@@ -2,11 +2,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/valorant');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Jersey+10+Charted&family=Kode+Mono:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+@font-face {
+  font-family: 'Mark SmallCaps'; 
+  src: url('./fonts/tungsten-bold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
+  /* font-family: "Geist Mono", monospace; */
 
 }
 
@@ -78,12 +92,16 @@ body {
 
 .default-text h1 {
   font-size: 3.3rem;
-  font-family: 'VALORANT', sans-serif;
-   
+  font-family: 'VALORANT';
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 .default-text h2 {
-  font-family: 'VALORANT', sans-serif;
-  font-weight: bold;
+  font-family: 'VALORANT';
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 5px;
+  animation: fadeIn 1s ease-in;
+  text-transform: uppercase;
 }
 
 .default-text p {
@@ -385,7 +403,7 @@ span.material-symbols-rounded {
     font-size: 14px;
   }
   #smart{
-   font-size: 100px !important;
+   font-size: 100 !important;
   }
   .default-text p{
     font-size: 1.2rem;
@@ -810,7 +828,7 @@ span.material-symbols-rounded {
   }
 
   #smart {
-    font-size: 40px !important;
+    font-size: 100px !important;
   }
 
   .default-text h2 {
